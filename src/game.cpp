@@ -1,3 +1,4 @@
+//game.cpp
 #include "game.h"
 #include "score.h"
 #include <GLFW/glfw3.h>
@@ -9,7 +10,7 @@ const float FROG_SIZE = 0.05f;
 const float LOG_WIDTH = 0.2f;
 const float LOG_HEIGHT = 0.1f;
 const int NUM_LOGS = 5;
-const float LOG_SPEED = 0.01f;
+const float LOG_SPEED = 0.005f;
 const int NUM_CARS = 5;
 const float CAR_WIDTH = 0.15f;
 const float CAR_HEIGHT = 0.1f;
@@ -82,7 +83,7 @@ void initGame() {
             x = -1.0f + CAR_WIDTH / 10;
         }
         float speed = CAR_SPEED * (rand() % 3 + 1);
-        if (!isMovingLeft) speed = -speed; // 如果是向右移動，速度取負值
+        if (!isMovingLeft) speed = -speed;
         cars.push_back({x, y, speed});
         isMovingLeft = !isMovingLeft;
     }
@@ -132,8 +133,8 @@ void updateGame() {
     }
 
     for (const auto& car : cars) {
-        if (frogY >= car.y - CAR_HEIGHT / 2 && frogY <= car.y + CAR_HEIGHT / 2 &&
-            frogX >= car.x - CAR_WIDTH / 2 && frogX <= car.x + CAR_WIDTH / 2) {
+        if (frogY == car.y - CAR_HEIGHT / 2 || frogY == car.y + CAR_HEIGHT / 2 ||
+            frogX == car.x - CAR_WIDTH / 2 || frogX == car.x + CAR_WIDTH / 2) {
             std::cout << "Game Over!" << std::endl;
             std::cout << "Current Score: " << getCurrentScore() << std::endl;
             std::cout << "High Score: " << getHighScore() << std::endl;

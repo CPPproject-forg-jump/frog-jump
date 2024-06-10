@@ -1,3 +1,4 @@
+//main.cpp
 #include <GLFW/glfw3.h>
 #include "game.h"
 #include "input.h"
@@ -6,9 +7,10 @@
 #include<iostream>
 
 const int WIDTH = 800;
-const int HEIGHT = 600;
+const int HEIGHT = 400;
 
 float frogY_last = -0.9f;
+bool menuRunning = true;
 
 int main() {
     if (!glfwInit()) {
@@ -28,20 +30,29 @@ int main() {
     initGame();
 
     while (!glfwWindowShouldClose(window)) {
-        updateGame();
-        if (frogY > frogY_last) {
-            increaseScore(1);
-        }
-
-        renderGame();
-        std::cout << "Current Score: " << getCurrentScore() << " | High Score: " << getHighScore() << std::endl;
-
-        if (!gameRunning) {
-            std::cout << "Press R to Restart" << std::endl;
+        if (menuRunning) {
+            renderMenu();
+            renderStartButton();
+        } else if (gameRunning) {
+            updateGame();
+            renderGame(); 
+        } else {
+            renderMenu();
+            renderStartButton();
         }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
+    }
+
+    while (frogY > frogY_last && frogX == frogX) {
+        increaseScore(1);
+        if (!gameRunning) {
+            //std::cout << "Press R to Restart" << std::endl;
+            //std::cout << "Current Score: " << getCurrentScore() << " | High Score: " << getHighScore() << std::endl;
+            resetScore();
+            break;
+        }
     }
 
     glfwDestroyWindow(window);

@@ -1,7 +1,9 @@
+//menu.h
 #ifndef MENU_H
 #define MENU_H
 
-void displayMenu();
-void handleMenuInput(int key);
+extern bool menuRunning;
 
+void renderMenu();
+void renderStartButton();
 #endif
