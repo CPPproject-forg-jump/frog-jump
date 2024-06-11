@@ -11,3 +11,4 @@ int getHighScore();
 void resetScore();
 
 #endif // SCORE_H
+

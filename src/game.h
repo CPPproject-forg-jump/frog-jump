@@ -1,4 +1,3 @@
-//game.h
 #ifndef GAME_H
 #define GAME_H
 #include <vector>
@@ -13,6 +12,7 @@ struct Car {
 };
 
 extern bool gameRunning;
+extern bool menuRunning;
 
 void initGame();
 void updateGame();

@@ -5,12 +5,12 @@
 #include <string>
 
 void renderMenu() {
-    glClearColor(0.0f, 1.0f, 0.0f, 1.0f); // 设置清除颜色为绿色
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // 设置清除颜色为绿色
     glClear(GL_COLOR_BUFFER_BIT); // 清除颜色缓冲区
 
     // 绘制绿色背景
     glBegin(GL_QUADS);
-    glColor3f(0.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 0.0f, 0.0f);
     glVertex2f(-1.0f, -1.0f);
     glVertex2f(1.0f, -1.0f);
     glVertex2f(1.0f, 1.0f);
@@ -28,3 +28,4 @@ void renderStartButton() {
     glVertex2f(-0.3f, 0.1f);
     glEnd();
 }
+

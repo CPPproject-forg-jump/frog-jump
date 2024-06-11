@@ -7,3 +7,4 @@ extern bool menuRunning;
 void renderMenu();
 void renderStartButton();
 #endif
+

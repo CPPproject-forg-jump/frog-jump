@@ -24,3 +24,4 @@ int getHighScore() {
 void resetScore() {
     currentScore = 0;
 }
+

@@ -1,4 +1,3 @@
-//input.cpp
 #include "input.h"
 #include "game.h"
 #include "score.h"
@@ -15,17 +14,14 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         } else if (gameRunning) {
             switch (key) {
                 case GLFW_KEY_W:
-                    frogY += 0.12f;
+                    frogY += 0.114f;
                     increaseScore(1);
-                break;
-                case GLFW_KEY_S:
-                    frogY -= 0.12f;
                     break;
                 case GLFW_KEY_A:
-                    frogX -= 0.12f;
+                    frogX -= 0.11f;
                     break;
                 case GLFW_KEY_D:
-                    frogX += 0.12f;
+                    frogX += 0.11f;
                     break;
                 case GLFW_KEY_R:
                     if (!gameRunning) {
@@ -38,6 +34,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
             }
         } else {
             if (key == GLFW_KEY_R) {
+                menuRunning = false;
                 initGame();
                 gameRunning = true;
             }

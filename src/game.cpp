@@ -1,4 +1,3 @@
-//game.cpp
 #include "game.h"
 #include "score.h"
 #include <GLFW/glfw3.h>
@@ -14,7 +13,7 @@ const float LOG_SPEED = 0.005f;
 const int NUM_CARS = 5;
 const float CAR_WIDTH = 0.15f;
 const float CAR_HEIGHT = 0.1f;
-const float CAR_SPEED = 0.02f;
+const float CAR_SPEED = 0.01f;
 
 float frogX = 0.0f;
 float frogY = -0.9f;
@@ -26,7 +25,8 @@ std::vector<Car> cars;
 
 bool isMovingLeft = true;
 bool isRiver = true;
-bool gameRunning = true;
+bool gameRunning = false;
+bool menuRunning = true;
 
 void renderLogs() {
     for (const auto& log : logs) {
@@ -43,8 +43,7 @@ void renderLogs() {
 void renderCars() {
     for (const auto& car : cars) {
         glBegin(GL_QUADS);
-        glColor3f(1.0f, 0.0f, 0.0f);
-        // 定義車子的四個頂點
+        glColor3f(1.0f, 0.0f, 0.0f); // 修改顏色為紅色，表示車子
         glVertex2f(car.x - CAR_WIDTH / 2, car.y - CAR_HEIGHT / 2);
         glVertex2f(car.x + CAR_WIDTH / 2, car.y - CAR_HEIGHT / 2);
         glVertex2f(car.x + CAR_WIDTH / 2, car.y + CAR_HEIGHT / 2);
@@ -56,32 +55,20 @@ void renderCars() {
 void initGame() {
     srand(static_cast<unsigned>(time(0)));
     
-    // 初始化浮木
     logs.clear();
     for (int i = 0; i < NUM_LOGS; ++i) {
         float y = -0.8f + i * (LOG_HEIGHT + 0.02f);
-        float x;
-        if (isMovingLeft) {
-            x = -1.0f + LOG_WIDTH / 2;
-        } else {
-            x = 1.0f - LOG_WIDTH / 2;
-        }
+        float x = (isMovingLeft) ? -1.0f + LOG_WIDTH / 2 : 1.0f - LOG_WIDTH / 2;
         float speed = LOG_SPEED * (rand() % 3 + 1);
-        if (!isMovingLeft) speed = -speed; // 如果是向右移動，速度取負值
+        if (!isMovingLeft) speed = -speed;
         logs.push_back({x, y, speed});
-        isMovingLeft = !isMovingLeft; // 每次迭代後改變方向
+        isMovingLeft = !isMovingLeft;
     }
 
-    // 初始化車子
     cars.clear();
     for (int i = 0; i < NUM_CARS; ++i) {
         float y = -0.2f + i * (CAR_HEIGHT + 0.02f);
-        float x;
-        if (isMovingLeft) {
-            x = 1.0f - CAR_WIDTH / 10;
-        } else {
-            x = -1.0f + CAR_WIDTH / 10;
-        }
+        float x = (isMovingLeft) ? 1.0f - CAR_WIDTH / 10 : -1.0f + CAR_WIDTH / 10;
         float speed = CAR_SPEED * (rand() % 3 + 1);
         if (!isMovingLeft) speed = -speed;
         cars.push_back({x, y, speed});
@@ -133,8 +120,8 @@ void updateGame() {
     }
 
     for (const auto& car : cars) {
-        if (frogY == car.y - CAR_HEIGHT / 2 || frogY == car.y + CAR_HEIGHT / 2 ||
-            frogX == car.x - CAR_WIDTH / 2 || frogX == car.x + CAR_WIDTH / 2) {
+        if (frogY >= car.y - CAR_HEIGHT / 2 && frogY <= car.y + CAR_HEIGHT / 2 &&
+            frogX >= car.x - CAR_WIDTH / 2 && frogX <= car.x + CAR_WIDTH / 2) {
             std::cout << "Game Over!" << std::endl;
             std::cout << "Current Score: " << getCurrentScore() << std::endl;
             std::cout << "High Score: " << getHighScore() << std::endl;
@@ -142,18 +129,17 @@ void updateGame() {
         }
     }
 
-    if (frogY > -0.8f && frogY < 0.8f && !onLog) {
+    if (frogY > -0.8f && frogY < -0.3f && !onLog) {
         std::cout << "Game Over!" << std::endl;
         std::cout << "Current Score: " << getCurrentScore() << std::endl;
         std::cout << "High Score: " << getHighScore() << std::endl;
         gameRunning = false;
     }
 
-    if (frogY > 0.8f) {
-        std::cout << "You Win!" << std::endl;
-        std::cout << "Current Score: " << getCurrentScore() << std::endl;
-        std::cout << "High Score: " << getHighScore() << std::endl;
-        gameRunning = false;
+    if (frogY > 0.6f) {
+        frogX = 0.0f; // 重置玩家位置
+        frogY = -0.9f;
+        increaseScore(10); // 過河獲得額外分數
     }
 }
 
@@ -171,4 +157,3 @@ void renderGame() {
     glVertex2f(frogX - FROG_SIZE, frogY + FROG_SIZE);
     glEnd();
 }
-
